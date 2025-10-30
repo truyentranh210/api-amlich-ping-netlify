@@ -1,10 +1,9 @@
 import express from "express";
 import serverless from "serverless-http";
-import fetch from "node-fetch"; // thay axios = fetch
 
 const app = express();
 
-// 🎯 Hàm chuyển dương → âm (đơn giản)
+// 🎯 Hàm chuyển dương → âm
 function solarToLunar(date = new Date()) {
   const baseDate = new Date(2000, 0, 6, 14, 14);
   const diff = (date - baseDate) / 86400000;
@@ -17,11 +16,11 @@ function solarToLunar(date = new Date()) {
 // 🏠 /home
 app.get("/home", (req, res) => {
   res.json({
-    api: "Âm lịch & Ping API (No Axios)",
-    version: "3.3.0",
+    api: "Âm lịch & Ping API (No axios, No fetch libs)",
+    version: "3.4.0",
     author: "fsdfsdf",
     endpoints: {
-      "/home": "Thông tin API",
+      "/home": "Giới thiệu API",
       "/amlich": "Ngày âm & dương hiện tại",
       "/ping?url=https://example.com": "Kiểm tra trạng thái website"
     }
@@ -47,7 +46,7 @@ app.get("/ping", async (req, res) => {
 
   try {
     const { hostname, port, protocol } = new URL(targetUrl);
-    const response = await fetch(targetUrl, { method: "GET" });
+    const response = await fetch(targetUrl, { method: "GET" }); // ✅ native fetch của Node
     res.json({
       status: "online",
       code: response.status,
