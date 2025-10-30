@@ -1,19 +1,20 @@
 import express from "express";
 import serverless from "serverless-http";
 import axios from "axios";
-import { SolarDate, convertSolar2Lunar } from "amlich-js";
+import moment from "moment-timezone";
+import lunar from "moment-lunar"; // thư viện âm lịch
 
 const app = express();
 
-// 🏠 /home - Trang giới thiệu API
+// 🏠 /home
 app.get("/home", (req, res) => {
   res.json({
     api: "Âm lịch & Ping API",
     author: "fsdfsdf",
-    version: "1.0.0",
+    version: "2.0.0",
     endpoints: {
       "/home": "Thông tin API",
-      "/amlich": "Lấy ngày âm lịch và dương lịch hôm nay",
+      "/amlich": "Lấy ngày âm & dương lịch hôm nay",
       "/ping?url=https://example.com": "Kiểm tra trạng thái website"
     },
     example: {
@@ -23,19 +24,21 @@ app.get("/home", (req, res) => {
   });
 });
 
-// 📅 /amlich - Ngày âm & dương lịch
+// 📅 /amlich - Trả về ngày âm & dương
 app.get("/amlich", (req, res) => {
-  const now = new Date();
-  const solar = new SolarDate(now.getDate(), now.getMonth() + 1, now.getFullYear());
-  const lunar = convertSolar2Lunar(solar);
+  const now = moment().tz("Asia/Ho_Chi_Minh");
+  const lunarDate = now.lunar(); // tính ngày âm
+
   res.json({
     status: "success",
-    solar_date: `${solar.day}/${solar.month}/${solar.year}`,
-    lunar_date: `${lunar.day}/${lunar.month}/${lunar.year}`,
+    solar_date: now.format("DD/MM/YYYY"),
+    lunar_date: `${lunarDate.date()}/${lunarDate.month() + 1}/${lunarDate.year()}`,
+    time: now.format("HH:mm:ss"),
+    timezone: now.tz(),
   });
 });
 
-// 🌐 /ping?url=... - Kiểm tra website
+// 🌐 /ping?url=...
 app.get("/ping", async (req, res) => {
   const targetUrl = req.query.url;
   if (!targetUrl) {
@@ -60,5 +63,4 @@ app.get("/ping", async (req, res) => {
   }
 });
 
-// ✅ Export cho Netlify
 export const handler = serverless(app);
