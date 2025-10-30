@@ -1,14 +1,14 @@
 import express from "express";
 import serverless from "serverless-http";
-import axios from "axios"; // <-- dùng const axios, không lỗi nữa
+import fetch from "node-fetch"; // thay axios = fetch
 
 const app = express();
 
-// 🎯 Hàm chuyển dương → âm (đơn giản, gần đúng)
+// 🎯 Hàm chuyển dương → âm (đơn giản)
 function solarToLunar(date = new Date()) {
   const baseDate = new Date(2000, 0, 6, 14, 14);
-  const diff = (date - baseDate) / 86400000; // ngày
-  const lunations = diff / 29.530588853; // chu kỳ mặt trăng
+  const diff = (date - baseDate) / 86400000;
+  const lunations = diff / 29.530588853;
   const lunarDays = (lunations - Math.floor(lunations)) * 29.530588853;
   const lunarDay = Math.round(lunarDays) || 1;
   return { day: lunarDay, month: date.getMonth() + 1, year: date.getFullYear() };
@@ -17,17 +17,13 @@ function solarToLunar(date = new Date()) {
 // 🏠 /home
 app.get("/home", (req, res) => {
   res.json({
-    api: "Âm lịch & Ping API (Final)",
-    version: "3.2.0",
+    api: "Âm lịch & Ping API (No Axios)",
+    version: "3.3.0",
     author: "fsdfsdf",
     endpoints: {
-      "/home": "Giới thiệu API",
+      "/home": "Thông tin API",
       "/amlich": "Ngày âm & dương hiện tại",
       "/ping?url=https://example.com": "Kiểm tra trạng thái website"
-    },
-    example: {
-      amlich: "https://tênmiền.netlify.app/amlich",
-      ping: "https://tênmiền.netlify.app/ping?url=https://example.com"
     }
   });
 });
@@ -51,7 +47,7 @@ app.get("/ping", async (req, res) => {
 
   try {
     const { hostname, port, protocol } = new URL(targetUrl);
-    const response = await axios.get(targetUrl, { timeout: 5000 });
+    const response = await fetch(targetUrl, { method: "GET" });
     res.json({
       status: "online",
       code: response.status,
