@@ -1,0 +1,13 @@
+{
+  "name": "amlich-api",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.19.2",
+    "serverless-http": "^3.2.0",
+    "axios": "^1.7.4",
+    "amlich-js": "^1.0.1"
+  },
+  "scripts": {
+    "start": "node netlify/functions/api.js"
+  }
+}
