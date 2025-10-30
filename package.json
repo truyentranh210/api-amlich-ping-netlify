@@ -1,5 +1,5 @@
 {
-  "name": "amlich-api-lite",
+  "name": "amlich-api-final",
   "type": "module",
   "dependencies": {
     "express": "^4.19.2",
