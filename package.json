@@ -1,15 +1,9 @@
 {
-  "name": "amlich-api",
+  "name": "amlich-api-lite",
   "type": "module",
   "dependencies": {
     "express": "^4.19.2",
     "serverless-http": "^3.2.0",
-    "axios": "^1.7.4",
-    "moment": "^2.30.1",
-    "moment-timezone": "^0.5.45",
-    "moment-lunar": "github:gucong3000/moment-lunar"
-  },
-  "scripts": {
-    "start": "node netlify/functions/api.js"
+    "axios": "^1.7.4"
   }
 }
